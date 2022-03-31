@@ -3,7 +3,7 @@ const fs = require("fs");
 const path = require("path");
 
 class Course {
-  constructor(title, price, img) {
+  constructor(title, img, price) {
     this.title = title;
     this.price = price;
     this.img = img;
