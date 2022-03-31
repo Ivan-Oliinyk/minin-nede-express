@@ -1,0 +1,20 @@
+[
+  {
+    "title": "Angular",
+    "price": "https://www.google.com/url?sa=i&url=https%3A%2F%2Fgithub.com%2Fangular%2Fangular&psig=AOvVaw1PN4CpM9OJMwK-3CVgeHp3&ust=1648812524334000&source=images&cd=vfe&ved=0CAsQjRxqFwoTCKD0qLif8PYCFQAAAAAdAAAAABAD",
+    "img": "3200",
+    "id": "15bc1bcd-f16d-411e-89ee-eb365e0b54d4"
+  },
+  {
+    "title": "Next",
+    "price": "https://www.google.com/imgres?imgurl=https%3A%2F%2Fpolyakovdmitriy.ru%2Fwp-content%2Fuploads%2F2020%2F09%2FGetting-Started-with-NextJS.jpg&imgrefurl=https%3A%2F%2Fpolyakovdmitriy.ru%2Fsvg-next-js%2F&tbnid=rF0hJZyX01PDvM&vet=12ahUKEwiR1-eXoPD2AhUrh_0HHc5uD1sQMygDegUIARDAAQ..i&docid=tITxpngBaKlUiM&w=650&h=366&q=next.js%20pictures&ved=2ahUKEwiR1-eXoPD2AhUrh_0HHc5uD1sQMygDegUIARDAAQ",
+    "img": "4100",
+    "id": "727f660d-84ed-48aa-95dc-a89ac6b5f11c"
+  },
+  {
+    "title": "JS",
+    "price": "https://www.google.com/imgres?imgurl=http%3A%2F%2Fw3.org.ua%2Fwp-content%2Fuploads%2F2017%2F01%2Ficon.javascript.png&imgrefurl=http%3A%2F%2Fw3.org.ua%2Fjs%2Fuslovnyie-operatoryi-v-js%2F&tbnid=_V0ND3r1fNn3fM&vet=12ahUKEwjLwNLdoPD2AhXMwuAKHYwTBYwQMygGegUIARCPAQ..i&docid=rs1RMNkUbL9LVM&w=401&h=401&q=js&ved=2ahUKEwjLwNLdoPD2AhXMwuAKHYwTBYwQMygGegUIARCPAQ",
+    "img": "1900",
+    "id": "88c22d6c-2a94-44d0-84ff-fe1dd2786167"
+  }
+]
