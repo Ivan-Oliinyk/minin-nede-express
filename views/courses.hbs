@@ -10,10 +10,19 @@
           </div>
           <div class="card-content">
             <h3 class="card-title">{{title}}</h3>
-            <p class="price">{{price}} &#8372</p>
+            <p class="price">{{price}}</p>
           </div>
           <div class="card-action">
-            <a href="/courses/{{id}}">Open course</a>
+            <div>
+              <a href="/courses/{{id}}" target="_blank">Open</a>
+              <a href="/courses/{{id}}/edit?allow=true">Edit</a>
+            </div>
+
+            <form action="/card/add" method="POST">
+              <input type="hidden" name="id" value={{id}} />
+              <button type="submit" class="btn btn-primery btn-bue">Buy</button>
+            </form>
+
           </div>
         </div>
       </div>
