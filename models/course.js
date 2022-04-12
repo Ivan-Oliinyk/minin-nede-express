@@ -1,83 +1,19 @@
-const uuid = require("uuid");
-const fs = require("fs");
-const path = require("path");
+const { Schema, model } = require("mongoose");
 
-class Course {
-  constructor(title, img, price) {
-    this.title = title;
-    this.price = price;
-    this.img = img;
-    this.id = uuid.v4();
-  }
+const course = new Schema({
+  title: {
+    type: String,
+    require: true,
+  },
 
-  toJSON() {
-    return {
-      title: this.title,
-      price: this.price,
-      img: this.img,
-      id: this.id,
-    };
-  }
+  price: {
+    type: Number,
+    require: true,
+  },
 
-  static async update(course) {
-    const courses = await Course.getAll();
-    const idx = courses.findIndex((c) => c.id === course.id);
-    courses[idx] = course;
+  img: {
+    type: String,
+  },
+});
 
-    return new Promise((resolve, reject) => {
-      fs.writeFile(
-        path.join(__dirname, "..", "data", "courses.json"),
-        JSON.stringify(courses),
-        (err) => {
-          if (err) {
-            reject(err);
-          } else {
-            resolve();
-          }
-        }
-      );
-    });
-  }
-
-  async save() {
-    const courses = await Course.getAll();
-    courses.push(this.toJSON());
-
-    return new Promise((resolve, reject) => {
-      fs.writeFile(
-        path.join(__dirname, "..", "data", "courses.json"),
-        JSON.stringify(courses),
-        (err) => {
-          if (err) {
-            reject(err);
-          } else {
-            resolve();
-          }
-        }
-      );
-    });
-  }
-
-  static getAll() {
-    return new Promise((resolve, reject) => {
-      fs.readFile(
-        path.join(__dirname, "..", "data", "courses.json"),
-        "utf-8",
-        (err, contents) => {
-          if (err) {
-            reject(err);
-          } else {
-            resolve(JSON.parse(contents));
-          }
-        }
-      );
-    });
-  }
-
-  static async getById(id) {
-    const courses = await Course.getAll();
-    return courses.find((course) => course.id === id);
-  }
-}
-
-module.exports = Course;
+module.exports = model("Course", course);

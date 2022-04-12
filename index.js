@@ -3,6 +3,7 @@ const express = require("express");
 const path = require("path");
 const mongoose = require("mongoose");
 const exphbs = require("express-handlebars");
+
 const homeRoutes = require("./routes/home");
 const coursesRoutes = require("./routes/courses");
 const cardRoutes = require("./routes/card");
