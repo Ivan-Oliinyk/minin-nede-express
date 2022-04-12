@@ -2,63 +2,8 @@
   padding: 0 2rem;
 }
 
-.page-footer {
-  padding: 0;
-}
-
-.content {
-  min-height: calc(100vh - 155px);
-}
-
-.card-wrapper {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: flex-start;
-  margin: 0 -10px;
-}
-
-.card {
-  padding: 10px;
-  margin: 10px;
-  min-height: 450px;
-  max-height: 450px;
-  min-width: 350px;
-  max-width: 350px;
-}
-
-.card .card-action {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.card .btn-bue {
-  text-transform: capitalize;
-}
-
-.card .card-image {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.card .card-image img {
-  min-height: 210px;
-  max-height: 210px;
-  display: block;
-  object-fit: contain;
-  object-position: center;
-}
-
 .price {
-  font-size: 22px;
-  color: green;
-  font-weight: 700;
-}
-
-.price-big {
-  font-size: 1.6rem;
-  font-weight: 700;
+  font-size: 2rem;
 }
 
 .course {
@@ -79,4 +24,36 @@
 
 .course .price.big {
   font-size: 2.5rem;
+}
+
+.card-action.actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.card-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.card-wrapper .card {
+  width: 330px;
+  height: 500px;
+  margin: 5px;
+}
+
+.card-wrapper .card-image img {
+  display: block;
+  object-fit: contain;
+  object-position: center;
+  height: 300px;
+}
+
+.card-wrapper .card-action a {
+  font-size: 12px;
+}
+
+.remove-course .btn {
+  margin-top: 10px;
 }
