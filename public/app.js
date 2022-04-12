@@ -1,8 +1,11 @@
-document.querySelectorAll(".price").forEach((node) => {
-  node.textContent = new Intl.NumberFormat("de-DE", {
+const toCurrency = (price) =>
+  new Intl.NumberFormat("de-DE", {
     currency: "UAH",
     style: "currency",
-  }).format(node.textContent);
+  }).format(price);
+
+document.querySelectorAll(".price").forEach((node) => {
+  node.textContent = toCurrency(node.textContent);
 });
 
 const $card = document.querySelector("#card");
@@ -16,7 +19,32 @@ if ($card) {
         method: "delete",
       })
         .then((res) => res.json())
-        .then((card) => console.log(card));
+        .then((card) => {
+          console.log(card);
+
+          if (card.courses.length) {
+            const html = card.courses
+              .map(({ title, count, id }) => {
+                return `
+                <tr>
+                  <td>${title}</td>
+                  <td>${count}</td>
+                  <td>
+                    <button class="btn btn-small js-remove" data-id="${id}">
+                      Remove
+                    </button>
+                  </td>
+                </tr>
+              `;
+              })
+              .join("");
+
+            $card.querySelector("tbody").innerHTML = html;
+            $card.querySelector(".price").textContent = toCurrency(card.price);
+          } else {
+            $card.innerHTML = "<p>Card is empty !!!</p>";
+          }
+        });
     }
   });
 }
