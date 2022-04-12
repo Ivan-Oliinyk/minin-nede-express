@@ -1,6 +1,7 @@
 require("dotenv").config();
 const express = require("express");
 const path = require("path");
+const mongoose = require("mongoose");
 const exphbs = require("express-handlebars");
 const homeRoutes = require("./routes/home");
 const coursesRoutes = require("./routes/courses");
@@ -26,7 +27,18 @@ app.use("/courses", coursesRoutes);
 app.use("/card", cardRoutes);
 
 const PORT = process.env.PORT || 3000;
+const DB_URL = process.env.DB_URL;
 
-app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT} ... `);
-});
+async function start() {
+  try {
+    await mongoose.connect(DB_URL, { useNewUrlParser: true });
+
+    app.listen(PORT, () => {
+      console.log(`Server is running on port ${PORT} ... `);
+    });
+  } catch (e) {
+    console.log(e);
+  }
+}
+
+start();
