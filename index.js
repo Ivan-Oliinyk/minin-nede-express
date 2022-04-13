@@ -8,6 +8,7 @@ const cardRoutes = require("./routes/card");
 const addRoutes = require("./routes/add");
 const orderRoutes = require("./routes/order");
 const coursesRoutes = require("./routes/courses");
+const authRouter = require("./routes/auth");
 const User = require("./models/user");
 const createBaseUser = require("./helpers/createBaseUser");
 
@@ -40,6 +41,7 @@ app.use("/add", addRoutes);
 app.use("/courses", coursesRoutes);
 app.use("/card", cardRoutes);
 app.use("/order", orderRoutes);
+app.use("/auth", authRouter);
 
 const PORT = process.env.PORT || 3001;
 
