@@ -3,14 +3,20 @@ const Course = require("../models/course");
 const router = Router();
 
 router.get("/", async (req, res) => {
-  const courses = await Course.find().populate("userId");
-  console.log("courses ===>", courses);
+  try {
+    const courses = await Course.find();
+    //   .populate("userId", "name email")
+    //   .select("price title img");
+    // console.log("courses ===>", courses);
 
-  res.render("courses", {
-    title: "Курсы",
-    isCourses: true,
-    courses,
-  });
+    res.render("courses", {
+      title: "Курсы",
+      isCourses: true,
+      courses,
+    });
+  } catch (e) {
+    console.log(e);
+  }
 });
 
 router.get("/:id/edit", async (req, res) => {
