@@ -15,7 +15,6 @@ const userSchema = new Schema({
   name: {
     type: String,
     require: true,
-    unique: true,
   },
 
   card: {
