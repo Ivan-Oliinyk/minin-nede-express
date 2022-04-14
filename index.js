@@ -2,6 +2,7 @@ require("dotenv").config();
 const express = require("express");
 const path = require("path");
 const csrf = require("csurf");
+const flash = require("connect-flash");
 const mongoose = require("mongoose");
 const exphbs = require("express-handlebars");
 const session = require("express-session");
@@ -46,6 +47,7 @@ app.use(
   })
 );
 app.use(csrf());
+app.use(flash());
 app.use(varMiddleware);
 app.use(userMiddleware);
 
@@ -67,7 +69,7 @@ async function start() {
 
     app.listen(PORT, () => {
       console.log(
-        `\n======================================= \n / Server is running on port ${PORT}... /\n=======================================\n`
+        `\n     ======================================= \n      / Server is running on port ${PORT}... /\n     =======================================\n`
       );
     });
   } catch (e) {
