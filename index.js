@@ -21,8 +21,6 @@ const userMiddleware = require("./middleware/user");
 
 const serverRun = require("./helpers/serverRun");
 
-// const MONGODB_URI = process.env.DB_URL;
-
 const app = express();
 
 const hbs = exphbs.create({
