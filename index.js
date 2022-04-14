@@ -4,6 +4,7 @@ const path = require("path");
 const mongoose = require("mongoose");
 const exphbs = require("express-handlebars");
 const session = require("express-session");
+const MongoStore = require("connect-mongodb-session")(session);
 
 const homeRoutes = require("./routes/home");
 const cardRoutes = require("./routes/card");
@@ -12,15 +13,20 @@ const orderRoutes = require("./routes/order");
 const coursesRoutes = require("./routes/courses");
 const authRouter = require("./routes/auth");
 
-const User = require("./models/user");
-const createBaseUser = require("./helpers/createBaseUser");
 const varMiddleware = require("./middleware/variables");
+
+const MONGODB_URI = process.env.DB_URL;
 
 const app = express();
 
 const hbs = exphbs.create({
   defaultLayout: "main",
   extname: "hbs",
+});
+
+const store = new MongoStore({
+  collection: "sessions",
+  uri: MONGODB_URI,
 });
 
 app.engine("hbs", hbs.engine);
@@ -34,6 +40,7 @@ app.use(
     secret: "some secret value",
     resave: false,
     seveUninitialized: false,
+    store,
   })
 );
 app.use(varMiddleware);
@@ -49,13 +56,10 @@ const PORT = process.env.PORT || 3001;
 
 async function start() {
   try {
-    const url = process.env.DB_URL;
-    await mongoose.connect(url, {
+    await mongoose.connect(MONGODB_URI, {
       useNewUrlParser: true,
       useFindAndModify: false,
     });
-
-    // createBaseUser();
 
     app.listen(PORT, () => {
       console.log(`\n Server is running on port ${PORT}... \n`);
