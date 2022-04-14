@@ -23,17 +23,31 @@ router.get("/logout", async (req, res) => {
 
 router.post("/login", async (req, res) => {
   try {
-    const user = await User.findById("62558c73ef610b536b984cb2");
-    req.session.user = user;
-    req.session.isAuthenticated = true;
-    req.session.save((err) => {
-      if (err) {
-        throw err;
+    const { email, password } = req.body;
+    const candidate = await User.findOne({ email });
+
+    if (candidate) {
+      const areSame = password === candidate.password;
+
+      if (areSame) {
+        const user = candidate;
+        req.session.user = user;
+        req.session.isAuthenticated = true;
+        req.session.save((err) => {
+          if (err) {
+            throw err;
+          }
+          res.redirect("/");
+        });
+      } else {
+        res.redirect("/auth/login#login");
       }
-      res.redirect("/");
-    });
+    } else {
+      res.redirect("/auth/login#login");
+    }
   } catch (e) {
     console.log(e);
+    res.status(400).json(e);
   }
 });
 
