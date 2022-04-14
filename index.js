@@ -1,4 +1,3 @@
-require("dotenv").config();
 const express = require("express");
 const path = require("path");
 const csrf = require("csurf");
@@ -7,6 +6,8 @@ const mongoose = require("mongoose");
 const exphbs = require("express-handlebars");
 const session = require("express-session");
 const MongoStore = require("connect-mongodb-session")(session);
+
+const config = require("./config");
 
 const homeRoutes = require("./routes/home");
 const cardRoutes = require("./routes/card");
@@ -18,7 +19,9 @@ const authRouter = require("./routes/auth");
 const varMiddleware = require("./middleware/variables");
 const userMiddleware = require("./middleware/user");
 
-const MONGODB_URI = process.env.DB_URL;
+const serverRun = require("./helpers/serverRun");
+
+// const MONGODB_URI = process.env.DB_URL;
 
 const app = express();
 
@@ -29,7 +32,7 @@ const hbs = exphbs.create({
 
 const store = new MongoStore({
   collection: "sessions",
-  uri: MONGODB_URI,
+  uri: config.MONGODB_URI,
 });
 
 app.engine("hbs", hbs.engine);
@@ -40,7 +43,7 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use(express.urlencoded({ extended: true }));
 app.use(
   session({
-    secret: "some secret value",
+    secret: config.SESSION_SECRET,
     resave: false,
     seveUninitialized: false,
     store,
@@ -58,19 +61,17 @@ app.use("/card", cardRoutes);
 app.use("/order", orderRoutes);
 app.use("/auth", authRouter);
 
-const PORT = process.env.PORT || 3000;
+const PORT = config.PORT || 3000;
 
 async function start() {
   try {
-    await mongoose.connect(MONGODB_URI, {
+    await mongoose.connect(config.MONGODB_URI, {
       useNewUrlParser: true,
       useFindAndModify: false,
     });
 
     app.listen(PORT, () => {
-      console.log(
-        `\n     ======================================= \n      / Server is running on port ${PORT}... /\n     =======================================\n`
-      );
+      console.log(serverRun(PORT));
     });
   } catch (e) {
     console.log(e);
