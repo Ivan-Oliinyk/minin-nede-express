@@ -8,6 +8,7 @@
     </div>
     <div id="login" class="col s6 offset-s3">
       <h1 class="title">Войти в магазин</h1>
+
       <form action="/auth/login" method="POST">
         <div class="input-field">
           <input
@@ -33,8 +34,11 @@
           <span class="helper-text" data-error="Введите ваш пароль"></span>
         </div>
 
+        <input type="hidden" name="_csrf" value="{{csrf}}" />
+
         <button class="btn btn-primary" type="submit">Войти</button>
       </form>
+
     </div>
     <div id="register" class="col s6 offset-s3">
       <h1 class="title">Зарегистрировать в магазине</h1>
@@ -80,6 +84,8 @@
           <label for="confirm-password">Повторите Ваш пароль</label>
           <span class="helper-text" data-error="Повторите Ваш пароль"></span>
         </div>
+
+        <input type="hidden" name="_csrf" value="{{csrf}}" />
 
         <button
           class="btn btn-primary"
