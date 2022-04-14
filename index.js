@@ -14,6 +14,7 @@ const coursesRoutes = require("./routes/courses");
 const authRouter = require("./routes/auth");
 
 const varMiddleware = require("./middleware/variables");
+const userMiddleware = require("./middleware/user");
 
 const MONGODB_URI = process.env.DB_URL;
 
@@ -44,6 +45,7 @@ app.use(
   })
 );
 app.use(varMiddleware);
+app.use(userMiddleware);
 
 app.use("/", homeRoutes);
 app.use("/add", addRoutes);
@@ -62,7 +64,9 @@ async function start() {
     });
 
     app.listen(PORT, () => {
-      console.log(`\n Server is running on port ${PORT}... \n`);
+      console.log(
+        `\n======================================= \n / Server is running on port ${PORT}... /\n=======================================\n`
+      );
     });
   } catch (e) {
     console.log(e);

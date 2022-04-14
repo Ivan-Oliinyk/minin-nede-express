@@ -17,7 +17,6 @@ const getPrice = (courses) =>
 router.post("/add", authMiddleware, async (req, res) => {
   try {
     const course = await Course.findById(req.body.id);
-
     await req.user.addToCard(course);
     res.redirect("/card");
   } catch (e) {
