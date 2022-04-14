@@ -27,16 +27,6 @@ app.engine("hbs", hbs.engine);
 app.set("view engine", "hbs");
 app.set("views", "views");
 
-app.use(async (req, res, next) => {
-  try {
-    const user = await User.findById("62558c73ef610b536b984cb2");
-    req.user = user;
-    next();
-  } catch (e) {
-    console.log(e);
-  }
-});
-
 app.use(express.static(path.join(__dirname, "public")));
 app.use(express.urlencoded({ extended: true }));
 app.use(
@@ -65,7 +55,7 @@ async function start() {
       useFindAndModify: false,
     });
 
-    createBaseUser();
+    // createBaseUser();
 
     app.listen(PORT, () => {
       console.log(`\n Server is running on port ${PORT}... \n`);
