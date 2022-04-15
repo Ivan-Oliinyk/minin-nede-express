@@ -116,6 +116,34 @@ router.get("/reset", (req, res) => {
   });
 });
 
+router.get("/password/:token", async (req, res) => {
+  const token = req.params.token;
+
+  if (!token) {
+    return res.redirect("/auth/login");
+  }
+
+  try {
+    const user = await User.findOne({
+      resetToken: token,
+      resetTokenExp: { $gt: Date.now() },
+    });
+
+    if (!user) {
+      res.redirect("/auth/login");
+    } else {
+      res.render("auth/password", {
+        title: "Востановить доступ !",
+        error: req.flash("error"),
+        userId: user._id.toString(),
+        token,
+      });
+    }
+  } catch (e) {
+    console.log(e);
+  }
+});
+
 router.post("/reset", (req, res) => {
   try {
     crypto.randomBytes(32, async (err, buffer) => {
