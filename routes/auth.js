@@ -3,6 +3,8 @@ const bcrypt = require("bcryptjs");
 const User = require("../models/user");
 const { route } = require("./home");
 const router = Router();
+const { mailOptions, sendEmail } = require("../mailler");
+const { BASE_URL } = require("../config");
 
 router.get("/login", async (req, res) => {
   res.render("auth/login", {
@@ -94,6 +96,18 @@ router.post("/register", async (req, res) => {
         await user.save();
 
         res.redirect("/auth/login#login");
+
+        const message = `
+        <html>
+          <h1>Добро пожаловать ${name} !</h1>
+          <p>Вы успешно создали аккаунт</p>
+
+          <hr />
+          <a href=${BASE_URL}>Перейти на сай</a>
+          </html>
+        `;
+
+        await sendEmail(mailOptions(email, message));
       } else {
         req.flash("registerError", "Пароли должны совпадать !");
         res.redirect("/auth/login#register");
