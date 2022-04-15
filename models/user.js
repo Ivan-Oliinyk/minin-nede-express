@@ -18,6 +18,9 @@ const userSchema = new Schema({
     unique: true,
   },
 
+  resetToken: String,
+  resetTokenExp: Date,
+
   card: {
     items: [
       {

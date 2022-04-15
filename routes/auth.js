@@ -1,10 +1,11 @@
 const { Router } = require("express");
 const bcrypt = require("bcryptjs");
+const crypto = require("crypto");
 const User = require("../models/user");
-const { route } = require("./home");
 const router = Router();
-const { mailOptions, sendEmail } = require("../mailler");
-const { BASE_URL } = require("../config");
+const { sendEmail } = require("../mailler");
+const registrationOptions = require("../email/registrationOptions");
+const resetEmail = require("../email/resetEmail");
 
 router.get("/login", async (req, res) => {
   res.render("auth/login", {
@@ -96,18 +97,7 @@ router.post("/register", async (req, res) => {
         await user.save();
 
         res.redirect("/auth/login#login");
-
-        const message = `
-        <html>
-          <h1>Добро пожаловать ${name} !</h1>
-          <p>Вы успешно создали аккаунт</p>
-
-          <hr />
-          <a href=${BASE_URL}>Перейти на сай</a>
-          </html>
-        `;
-
-        await sendEmail(mailOptions(email, message));
+        await sendEmail(registrationOptions(email, name));
       } else {
         req.flash("registerError", "Пароли должны совпадать !");
         res.redirect("/auth/login#register");
@@ -116,6 +106,42 @@ router.post("/register", async (req, res) => {
   } catch (e) {
     console.log(e);
     res.status(500).json(e);
+  }
+});
+
+router.get("/reset", (req, res) => {
+  res.render("auth/reset", {
+    title: "Востановление пароля",
+    error: req.flash("error"),
+  });
+});
+
+router.post("/reset", (req, res) => {
+  try {
+    crypto.randomBytes(32, async (err, buffer) => {
+      if (err) {
+        req.flash("error", "Что-то пошло не так повторите попытку позже !");
+        return res.redirect("/auth/reset");
+      }
+
+      const token = buffer.toString("hex");
+      const candidate = await User.findOne({ email: req.body.email });
+
+      if (candidate) {
+        candidate.resetToken = token;
+        candidate.resetTokenExp = Date.now() + 60 * 60 * 1000;
+
+        await candidate.save();
+        await sendEmail(resetEmail(candidate.email, token));
+
+        res.redirect("/auth/login");
+      } else {
+        req.flash("error", "Такого email нету !");
+        res.redirect("/auth/reset");
+      }
+    });
+  } catch (e) {
+    console.log(e);
   }
 });
 
