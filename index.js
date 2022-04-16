@@ -19,6 +19,9 @@ const serverRun = require("./helpers/serverRun");
 
 const {
   ROUTRES: { BASE, COURSE_ADD, COURESE, CARD, ORDER, AUTH },
+  PORT,
+  MONGODB_URI,
+  SESSION_SECRET,
 } = config;
 
 const app = express();
@@ -31,7 +34,7 @@ const hbs = exphbs.create({
 
 const store = new MongoStore({
   collection: "sessions",
-  uri: config.MONGODB_URI,
+  uri: MONGODB_URI,
 });
 
 app.engine("hbs", hbs.engine);
@@ -42,7 +45,7 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use(express.urlencoded({ extended: true }));
 app.use(
   session({
-    secret: config.SESSION_SECRET,
+    secret: SESSION_SECRET,
     resave: false,
     seveUninitialized: false,
     store,
@@ -60,8 +63,6 @@ app.use(CARD, cardRoutes);
 app.use(ORDER, orderRoutes);
 app.use(AUTH, authRouter);
 
-const PORT = config.PORT || 3000;
-
 async function start() {
   try {
     await mongoose.connect(config.MONGODB_URI, {
@@ -69,7 +70,7 @@ async function start() {
       useFindAndModify: false,
     });
 
-    app.listen(PORT, () => {
+    app.listen(PORT || 3000, () => {
       console.log(serverRun(PORT));
     });
   } catch (e) {
