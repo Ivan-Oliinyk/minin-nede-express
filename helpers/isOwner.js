@@ -1,3 +1,7 @@
 module.exports = function (a, b) {
-  return a.toString() !== b.toString();
+  if (a !== null && b !== null) {
+    return a.toString() === b.toString();
+  }
+
+  return false;
 };

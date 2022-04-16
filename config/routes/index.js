@@ -22,6 +22,7 @@ module.exports = {
   AUTH_REGISTER_REDIRECT: "/auth/login#register",
   AUTH_RESET_PASSWORD: "/reset",
   AUTH_RESET_PASSWORD_TOKEN: "/password/:token",
+  AUTH_RESET_PASSWORD_REDIRECT: "/auth/password",
   AUTH_RESET_REDIRECT: "/auth/reset",
   AUTH_PASSWORD: "/password",
   AUTH_PASSWORD_REDIRECT: "/auth/password/",

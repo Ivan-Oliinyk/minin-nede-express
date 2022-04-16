@@ -41,7 +41,7 @@ router.get(COURSE_EDIT, authMiddleware, async (req, res) => {
   try {
     const course = await Course.findById(req.params.id);
 
-    if (isOwner(course.userId, req.user._id)) {
+    if (!isOwner(course.userId, req.user._id)) {
       return res.redirect(COURESE);
     }
 
@@ -56,7 +56,10 @@ router.get(COURSE_EDIT, authMiddleware, async (req, res) => {
 
 router.post(COURSE_REMOVE, authMiddleware, async (req, res) => {
   try {
-    await Course.findByIdAndRemove(req.body.id);
+    await Course.findByIdAndRemove({
+      _id: req.body.id,
+      courseId: req.user._id,
+    });
     res.redirect(COURESE);
   } catch (e) {
     console.log(e);
@@ -68,7 +71,17 @@ router.post(COURSE_EDIT_POST, authMiddleware, async (req, res) => {
     const { id } = req.body;
     delete req.body.id;
 
-    await Course.findByIdAndUpdate(id, req.body);
+    const course = await Course.findById(id);
+
+    if (!isOwner(course.userId, req.user._id)) {
+      return res.redirect(COURESE);
+    }
+
+    Object.assign(course, req.body);
+    await course.save();
+
+    // await Course.findByIdAndUpdate(id, req.body);
+
     res.redirect(COURESE);
   } catch (e) {
     console.log(e);

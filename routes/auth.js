@@ -7,6 +7,7 @@ const { sendEmail } = require("../mailler");
 const registrationOptions = require("../email/registrationOptions");
 const resetEmail = require("../email/resetEmail");
 const config = require("../config");
+const { AUTH_RESET_PASSWORD_REDIRECT } = require("../config/routes");
 const {
   ROUTRES: {
     BASE,
@@ -177,10 +178,10 @@ router.post(AUTH_RESET_PASSWORD, (req, res) => {
         await candidate.save();
         await sendEmail(resetEmail(candidate.email, token));
 
-        res.redirect(AUTH + AUTH_LOGIN);
+        res.redirect(AUTH_LOGIN_REDIRECT);
       } else {
         req.flash("error", "Такого email нету !");
-        res.redirect(AUTH + AUTH_RESET_PASSWORD);
+        res.redirect(AUTH_RESET_PASSWORD_REDIRECT);
       }
     });
   } catch (e) {
