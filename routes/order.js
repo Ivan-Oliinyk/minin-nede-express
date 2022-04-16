@@ -2,8 +2,12 @@ const authMiddleware = require("../middleware/auth");
 const { Router } = require("express");
 const router = Router();
 const Order = require("../models/order");
+const config = require("../config");
+const {
+  ROUTRES: { BASE, ORDER },
+} = config;
 
-router.get("/", authMiddleware, async (req, res) => {
+router.get(BASE, authMiddleware, async (req, res) => {
   try {
     const order = await Order.find({ "user.userId": req.user._id }).populate(
       "user.userId"
@@ -25,7 +29,7 @@ router.get("/", authMiddleware, async (req, res) => {
   }
 });
 
-router.post("/", authMiddleware, async (req, res) => {
+router.post(BASE, authMiddleware, async (req, res) => {
   try {
     const user = await req.user.populate("card.items.courseId").execPopulate();
 
@@ -46,7 +50,7 @@ router.post("/", authMiddleware, async (req, res) => {
     await order.save();
     await req.user.clearCard();
 
-    res.redirect("/order");
+    res.redirect(ORDER);
   } catch (e) {
     console.log(e);
   }

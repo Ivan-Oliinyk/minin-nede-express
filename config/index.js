@@ -1,4 +1,5 @@
 require("dotenv").config();
+const routes = require("./routes");
 
 module.exports = {
   MONGODB_URI: process.env.DB_URL,
@@ -11,4 +12,6 @@ module.exports = {
   EMAIL_SERVICE: process.env.EMAIL_SERVICE,
 
   BASE_URL: process.env.BASE_URL + ":" + process.env.PORT,
+
+  ROUTRES: routes,
 };

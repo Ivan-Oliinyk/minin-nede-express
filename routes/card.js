@@ -2,6 +2,10 @@ const { Router } = require("express");
 const Course = require("../models/course");
 const authMiddleware = require("../middleware/auth");
 const router = Router();
+const config = require("../config");
+const {
+  ROUTRES: { COURSE_ADD, CARD, CARD_REMOVE },
+} = config;
 
 const mapCartItems = (card) => {
   return card.items.map((course) => ({
@@ -14,17 +18,17 @@ const mapCartItems = (card) => {
 const getPrice = (courses) =>
   courses.reduce((total, { price, count }) => (total += price * count), 0);
 
-router.post("/add", authMiddleware, async (req, res) => {
+router.post(COURSE_ADD, authMiddleware, async (req, res) => {
   try {
     const course = await Course.findById(req.body.id);
     await req.user.addToCard(course);
-    res.redirect("/card");
+    res.redirect(CARD);
   } catch (e) {
     console.log(e);
   }
 });
 
-router.delete("/remove/:id", authMiddleware, async (req, res) => {
+router.delete(CARD_REMOVE, authMiddleware, async (req, res) => {
   try {
     await req.user.removeFromCard(req.params.id);
     const user = await req.user.populate("card.items.courseId").execPopulate();

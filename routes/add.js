@@ -2,15 +2,19 @@ const { Router } = require("express");
 const Course = require("../models/course");
 const authMiddleware = require("../middleware/auth");
 const router = Router();
+const config = require("../config");
+const {
+  ROUTRES: { BASE, COURESE },
+} = config;
 
-router.get("/", authMiddleware, (req, res) => {
+router.get(BASE, authMiddleware, (req, res) => {
   res.render("add", {
     title: "Добавить курс",
     isAdd: true,
   });
 });
 
-router.post("/", authMiddleware, async (req, res) => {
+router.post(BASE, authMiddleware, async (req, res) => {
   const course = new Course({
     title: req.body.title,
     price: req.body.price,
@@ -20,7 +24,7 @@ router.post("/", authMiddleware, async (req, res) => {
 
   try {
     await course.save();
-    res.redirect("/courses");
+    res.redirect(COURESE);
   } catch (e) {
     console.log(e);
   }

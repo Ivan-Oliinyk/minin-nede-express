@@ -3,8 +3,19 @@ const Course = require("../models/course");
 const authMiddleware = require("../middleware/auth");
 const isOwner = require("../helpers/isOwner");
 const router = Router();
+const config = require("../config");
+const {
+  ROUTRES: {
+    BASE,
+    COURSE_EDIT,
+    COURESE,
+    COURSE_REMOVE,
+    COURSE_EDIT_POST,
+    COURSE_ONE,
+  },
+} = config;
 
-router.get("/", async (req, res) => {
+router.get(BASE, async (req, res) => {
   try {
     const courses = await Course.find()
       .populate("userId", "email name")
@@ -22,16 +33,16 @@ router.get("/", async (req, res) => {
   }
 });
 
-router.get("/:id/edit", authMiddleware, async (req, res) => {
+router.get(COURSE_EDIT, authMiddleware, async (req, res) => {
   if (!req.query.allow) {
-    return res.redirect("/");
+    return res.redirect(BASE);
   }
 
   try {
     const course = await Course.findById(req.params.id);
 
     if (isOwner(course.userId, req.user._id)) {
-      return res.redirect("/courses");
+      return res.redirect(COURESE);
     }
 
     res.render("course-edit", {
@@ -43,28 +54,28 @@ router.get("/:id/edit", authMiddleware, async (req, res) => {
   }
 });
 
-router.post("/remove", authMiddleware, async (req, res) => {
+router.post(COURSE_REMOVE, authMiddleware, async (req, res) => {
   try {
     await Course.findByIdAndRemove(req.body.id);
-    res.redirect("/courses");
+    res.redirect(COURESE);
   } catch (e) {
     console.log(e);
   }
 });
 
-router.post("/edit", authMiddleware, async (req, res) => {
+router.post(COURSE_EDIT_POST, authMiddleware, async (req, res) => {
   try {
     const { id } = req.body;
     delete req.body.id;
 
     await Course.findByIdAndUpdate(id, req.body);
-    res.redirect("/courses");
+    res.redirect(COURESE);
   } catch (e) {
     console.log(e);
   }
 });
 
-router.get("/:id", async (req, res) => {
+router.get(COURSE_ONE, async (req, res) => {
   try {
     const course = await Course.findById(req.params.id);
     res.render("course", {

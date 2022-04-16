@@ -6,20 +6,20 @@ const mongoose = require("mongoose");
 const exphbs = require("express-handlebars");
 const session = require("express-session");
 const MongoStore = require("connect-mongodb-session")(session);
-
 const config = require("./config");
-
 const homeRoutes = require("./routes/home");
 const cardRoutes = require("./routes/card");
 const addRoutes = require("./routes/add");
 const orderRoutes = require("./routes/order");
 const coursesRoutes = require("./routes/courses");
 const authRouter = require("./routes/auth");
-
 const varMiddleware = require("./middleware/variables");
 const userMiddleware = require("./middleware/user");
-
 const serverRun = require("./helpers/serverRun");
+
+const {
+  ROUTRES: { BASE, COURSE_ADD, COURESE, CARD, ORDER, AUTH },
+} = config;
 
 const app = express();
 
@@ -53,12 +53,12 @@ app.use(flash());
 app.use(varMiddleware);
 app.use(userMiddleware);
 
-app.use("/", homeRoutes);
-app.use("/add", addRoutes);
-app.use("/courses", coursesRoutes);
-app.use("/card", cardRoutes);
-app.use("/order", orderRoutes);
-app.use("/auth", authRouter);
+app.use(BASE, homeRoutes);
+app.use(COURSE_ADD, addRoutes);
+app.use(COURESE, coursesRoutes);
+app.use(CARD, cardRoutes);
+app.use(ORDER, orderRoutes);
+app.use(AUTH, authRouter);
 
 const PORT = config.PORT || 3000;
 

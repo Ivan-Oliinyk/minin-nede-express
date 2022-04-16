@@ -1,12 +1,11 @@
-const {Router} = require('express')
-const router = Router()
+const { Router } = require("express");
+const router = Router();
+const config = require("../config");
+const getHome = require("./home/getHomePage");
+const {
+  ROUTRES: { BASE },
+} = config;
 
-router.get('/', (req, res) => {
-  res.render('index', {
-    title: 'Главная страница',
-    isHome: true
-  })
-})
+router.get(BASE, getHome);
 
-
-module.exports = router
+module.exports = router;

@@ -6,8 +6,23 @@ const router = Router();
 const { sendEmail } = require("../mailler");
 const registrationOptions = require("../email/registrationOptions");
 const resetEmail = require("../email/resetEmail");
+const config = require("../config");
+const {
+  ROUTRES: {
+    BASE,
+    AUTH_LOGIN,
+    AUTH_LOGOUT,
+    AUTH_LOGIN_REDIRECT,
+    AUTH_REGISTER,
+    AUTH_REGISTER_REDIRECT,
+    AUTH_RESET_PASSWORD,
+    AUTH_RESET_PASSWORD_TOKEN,
+    AUTH_PASSWORD_REDIRECT,
+    AUTH_PASSWORD,
+  },
+} = config;
 
-router.get("/login", async (req, res) => {
+router.get(AUTH_LOGIN, async (req, res) => {
   res.render("auth/login", {
     title: "Авторизация",
     isLogin: true,
@@ -16,10 +31,10 @@ router.get("/login", async (req, res) => {
   });
 });
 
-router.get("/logout", async (req, res) => {
+router.get(AUTH_LOGOUT, async (req, res) => {
   try {
     req.session.destroy(() => {
-      res.redirect("/auth/login#login");
+      res.redirect(AUTH_LOGIN_REDIRECT);
     });
   } catch (e) {
     console.log(e);
@@ -27,7 +42,7 @@ router.get("/logout", async (req, res) => {
   }
 });
 
-router.post("/login", async (req, res) => {
+router.post(AUTH_LOGIN, async (req, res) => {
   try {
     let { email, password } = req.body;
     email = email.toLowerCase();
@@ -45,15 +60,15 @@ router.post("/login", async (req, res) => {
           if (err) {
             throw err;
           }
-          res.redirect("/");
+          res.redirect(BASE);
         });
       } else {
         req.flash("loginError", "Неверный пароль !");
-        res.redirect("/auth/login#login");
+        res.redirect(AUTH_LOGIN_REDIRECT);
       }
     } else {
       req.flash("loginError", "Такого пользователя не существует !");
-      res.redirect("/auth/login#login");
+      res.redirect(AUTH_LOGIN_REDIRECT);
     }
   } catch (e) {
     console.log(e);
@@ -61,7 +76,7 @@ router.post("/login", async (req, res) => {
   }
 });
 
-router.post("/register", async (req, res) => {
+router.post(AUTH_REGISTER, async (req, res) => {
   try {
     let { email, password, name, repeat } = req.body;
     email = email.toLowerCase();
@@ -73,14 +88,14 @@ router.post("/register", async (req, res) => {
     if (candidateEmail) {
       req.flash("registerError", "Пользователь с таким email уже существует !");
 
-      return res.redirect("/auth/login#register");
+      return res.redirect(AUTH_REGISTER_REDIRECT);
     } else if (candidateName) {
       req.flash(
         "registerError",
         "Пользователь с таким именем уже существует !"
       );
 
-      return res.redirect("/auth/login#register");
+      return res.redirect(AUTH_REGISTER);
     } else {
       const confirmPassword = repeat === password;
 
@@ -96,11 +111,11 @@ router.post("/register", async (req, res) => {
 
         await user.save();
 
-        res.redirect("/auth/login#login");
+        res.redirect(AUTH_LOGIN_REDIRECT);
         await sendEmail(registrationOptions(email, name));
       } else {
         req.flash("registerError", "Пароли должны совпадать !");
-        res.redirect("/auth/login#register");
+        res.redirect(AUTH_REGISTER_REDIRECT);
       }
     }
   } catch (e) {
@@ -109,18 +124,18 @@ router.post("/register", async (req, res) => {
   }
 });
 
-router.get("/reset", (req, res) => {
+router.get(AUTH_RESET_PASSWORD, (req, res) => {
   res.render("auth/reset", {
     title: "Востановление пароля",
     error: req.flash("error"),
   });
 });
 
-router.get("/password/:token", async (req, res) => {
+router.get(AUTH_RESET_PASSWORD_TOKEN, async (req, res) => {
   const token = req.params.token;
 
   if (!token) {
-    return res.redirect("/auth/login");
+    return res.redirect(AUTH_LOGIN);
   }
 
   try {
@@ -130,7 +145,7 @@ router.get("/password/:token", async (req, res) => {
     });
 
     if (!user) {
-      res.redirect("/auth/login");
+      res.redirect(AUTH + AUTH_LOGIN);
     } else {
       res.render("auth/password", {
         title: "Востановить доступ !",
@@ -144,12 +159,12 @@ router.get("/password/:token", async (req, res) => {
   }
 });
 
-router.post("/reset", (req, res) => {
+router.post(AUTH_RESET_PASSWORD, (req, res) => {
   try {
     crypto.randomBytes(32, async (err, buffer) => {
       if (err) {
         req.flash("error", "Что-то пошло не так повторите попытку позже !");
-        return res.redirect("/auth/reset");
+        return res.redirect(AUTH_RESET_REDIRECT);
       }
 
       const token = buffer.toString("hex");
@@ -162,10 +177,10 @@ router.post("/reset", (req, res) => {
         await candidate.save();
         await sendEmail(resetEmail(candidate.email, token));
 
-        res.redirect("/auth/login");
+        res.redirect(AUTH + AUTH_LOGIN);
       } else {
         req.flash("error", "Такого email нету !");
-        res.redirect("/auth/reset");
+        res.redirect(AUTH + AUTH_RESET_PASSWORD);
       }
     });
   } catch (e) {
@@ -173,7 +188,7 @@ router.post("/reset", (req, res) => {
   }
 });
 
-router.post("/password", async (req, res) => {
+router.post(AUTH_PASSWORD, async (req, res) => {
   try {
     const { userId, token, password, confirmPassword } = req.body;
     const user = await User.findOne({
@@ -184,7 +199,7 @@ router.post("/password", async (req, res) => {
 
     if (confirmPassword !== password) {
       req.flash("confirmError", "Пароли должны совпадать !");
-      return res.redirect("/auth/password/" + token);
+      return res.redirect(AUTH_PASSWORD_REDIRECT + token);
     }
 
     if (user) {
