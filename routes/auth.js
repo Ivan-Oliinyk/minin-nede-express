@@ -1,13 +1,14 @@
 const { Router } = require("express");
 const bcrypt = require("bcryptjs");
 const crypto = require("crypto");
+const { body, validationResult } = require("express-validator/check");
 const User = require("../models/user");
 const router = Router();
 const { sendEmail } = require("../mailler");
 const registrationOptions = require("../email/registrationOptions");
 const resetEmail = require("../email/resetEmail");
 const config = require("../config");
-const { AUTH_RESET_PASSWORD_REDIRECT } = require("../config/routes");
+
 const {
   ROUTRES: {
     BASE,
@@ -18,6 +19,7 @@ const {
     AUTH_REGISTER_REDIRECT,
     AUTH_RESET_PASSWORD,
     AUTH_RESET_PASSWORD_TOKEN,
+    AUTH_RESET_PASSWORD_REDIRECT,
     AUTH_PASSWORD_REDIRECT,
     AUTH_PASSWORD,
   },
@@ -77,7 +79,7 @@ router.post(AUTH_LOGIN, async (req, res) => {
   }
 });
 
-router.post(AUTH_REGISTER, async (req, res) => {
+router.post(AUTH_REGISTER, body("email").isEmail(), async (req, res) => {
   try {
     let { email, password, name, repeat } = req.body;
     email = email.toLowerCase();
@@ -85,6 +87,12 @@ router.post(AUTH_REGISTER, async (req, res) => {
 
     const candidateName = await User.findOne({ name });
     const candidateEmail = await User.findOne({ email });
+    const errors = validationResult(req);
+
+    if (!errors.isEmpty()) {
+      req.flash("registerError", errors.array()[0].msg);
+      return res.status(422).redirect(AUTH_REGISTER_REDIRECT);
+    }
 
     if (candidateEmail) {
       req.flash("registerError", "Пользователь с таким email уже существует !");
