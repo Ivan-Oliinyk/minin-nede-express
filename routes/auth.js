@@ -1,13 +1,14 @@
 const { Router } = require("express");
 const bcrypt = require("bcryptjs");
 const crypto = require("crypto");
-const { body, validationResult } = require("express-validator/check");
+const { validationResult } = require("express-validator/check");
 const User = require("../models/user");
 const router = Router();
 const { sendEmail } = require("../mailler");
 const registrationOptions = require("../email/registrationOptions");
 const resetEmail = require("../email/resetEmail");
 const config = require("../config");
+const registorValidator = require("../helpers/validators/validators");
 
 const {
   ROUTRES: {
@@ -79,7 +80,7 @@ router.post(AUTH_LOGIN, async (req, res) => {
   }
 });
 
-router.post(AUTH_REGISTER, body("email").isEmail(), async (req, res) => {
+router.post(AUTH_REGISTER, registorValidator, async (req, res) => {
   try {
     let { email, password, name, repeat } = req.body;
     email = email.toLowerCase();
