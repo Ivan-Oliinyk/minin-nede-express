@@ -8,7 +8,7 @@ const { sendEmail } = require("../mailler");
 const registrationOptions = require("../email/registrationOptions");
 const resetEmail = require("../email/resetEmail");
 const config = require("../config");
-const registorValidator = require("../helpers/validators/validators");
+const { registorValidator } = require("../helpers/validators/validators");
 
 const {
   ROUTRES: {

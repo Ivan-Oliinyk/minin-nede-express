@@ -1,6 +1,8 @@
 const { Router } = require("express");
+const { validationResult } = require("express-validator/check");
 const Course = require("../models/course");
 const authMiddleware = require("../middleware/auth");
+const { courseValidator } = require("../helpers/validators/courseValidator");
 const router = Router();
 const config = require("../config");
 const {
@@ -14,7 +16,22 @@ router.get(BASE, authMiddleware, (req, res) => {
   });
 });
 
-router.post(BASE, authMiddleware, async (req, res) => {
+router.post(BASE, authMiddleware, courseValidator, async (req, res) => {
+  const errors = validationResult(req);
+
+  if (!errors.isEmpty()) {
+    return res.status(422).render("add", {
+      title: "Добавить курс",
+      isAdd: true,
+      error: errors.array()[0].msg,
+      data: {
+        title: req.body.title,
+        price: req.body.price,
+        img: req.body.img,
+      },
+    });
+  }
+
   const course = new Course({
     title: req.body.title,
     price: req.body.price,

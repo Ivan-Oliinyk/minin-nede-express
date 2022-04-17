@@ -15,6 +15,7 @@ const coursesRoutes = require("./routes/courses");
 const authRouter = require("./routes/auth");
 const varMiddleware = require("./middleware/variables");
 const userMiddleware = require("./middleware/user");
+const notFoundPage = require("./middleware/notFound404");
 const serverRun = require("./helpers/serverRun");
 
 const {
@@ -62,6 +63,8 @@ app.use(COURESE, coursesRoutes);
 app.use(CARD, cardRoutes);
 app.use(ORDER, orderRoutes);
 app.use(AUTH, authRouter);
+
+app.use(notFoundPage);
 
 async function start() {
   try {
