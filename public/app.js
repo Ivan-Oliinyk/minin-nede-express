@@ -5,6 +5,14 @@ const toCurrency = (price) => {
   }).format(price);
 };
 
+const maxTextLengt = (text, num = 40) => {
+  if (String(text).length >= num) {
+    return String(text).slice(0, num) + "...";
+  }
+
+  return String(text);
+};
+
 document.querySelectorAll(".price").forEach((node) => {
   node.textContent = toCurrency(node.textContent);
 });
@@ -64,3 +72,7 @@ document.querySelectorAll(".date").forEach((node) => {
 });
 
 M.Tabs.init(document.querySelectorAll(".tabs"));
+
+document
+  .querySelectorAll("#text-title")
+  .forEach((node) => (node.textContent = maxTextLengt(node.textContent)));

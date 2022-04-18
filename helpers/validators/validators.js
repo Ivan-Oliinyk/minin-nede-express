@@ -1,10 +1,8 @@
 const { body } = require("express-validator/check");
 
 exports.registorValidator = [
-  body("email")
-    .isEmail()
-    .withMessage("Ведите коррекстный email !")
-    .normalizeEmail(),
+  body("email").isEmail().withMessage("Ведите коррекстный email !"),
+  // .normalizeEmail(),
   body("password")
     .trim()
     .isLength({ min: 6, max: 20 })
