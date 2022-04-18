@@ -3,7 +3,7 @@ const router = Router();
 const config = require("../config");
 const getHome = require("./home/getHomePage");
 const {
-  ROUTRES: { BASE },
+  ROUTES: { BASE },
 } = config;
 
 router.get(BASE, getHome);

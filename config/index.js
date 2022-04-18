@@ -13,5 +13,5 @@ module.exports = {
 
   BASE_URL: process.env.BASE_URL + ":" + process.env.PORT,
 
-  ROUTRES: routes,
+  ROUTES: routes,
 };

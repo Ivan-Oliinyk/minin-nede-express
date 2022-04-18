@@ -1,0 +1,46 @@
+<h1 class="title">Pofile</h1>
+
+<div class="row">
+  <div class="col s6">
+    <img
+      class="avatart"
+      src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRlP08Jy1QzdW_DHhA6E62fo5C0OyycFrV3cg&usqp=CAU"
+      alt="avatar"
+    />
+    <p>аватара нету</p>
+  </div>
+  <div class="col s6">
+    <form action="/profile" method="post">
+      <p>Ваш email: <strong>{{user.email}}</strong></p>
+
+      <div class="input-field">
+        <input
+          id="name"
+          name="name"
+          type="text"
+          class="validate"
+          value="{{user.name}}"
+          required
+        />
+        <label for="name">Ваше имя</label>
+        <span class="helper-text" data-error="Имя не может быть пустым"></span>
+      </div>
+
+      <div class="file-field input-field">
+        <div class="btn">
+          <span>Аватар</span>
+          <input type="file" name="avatar" />
+        </div>
+        <div class="file-path-wrapper">
+          <input class="file-path validate" type="text" />
+        </div>
+      </div>
+
+      <input type="hidden" name="_csrf" value="{{csrf}}" />
+
+      <button type="submit" class="btn btn-primary">Изменить</button>
+
+    </form>
+
+  </div>
+</div>

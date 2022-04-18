@@ -26,4 +26,6 @@ module.exports = {
   AUTH_RESET_REDIRECT: "/auth/reset",
   AUTH_PASSWORD: "/password",
   AUTH_PASSWORD_REDIRECT: "/auth/password/",
+
+  PROFILE: "/profile",
 };

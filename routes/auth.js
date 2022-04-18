@@ -11,7 +11,7 @@ const config = require("../config");
 const { registorValidator } = require("../helpers/validators/validators");
 
 const {
-  ROUTRES: {
+  ROUTES: {
     BASE,
     AUTH_LOGIN,
     AUTH_LOGOUT,

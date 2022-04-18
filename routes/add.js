@@ -6,7 +6,7 @@ const { courseValidator } = require("../helpers/validators/courseValidator");
 const router = Router();
 const config = require("../config");
 const {
-  ROUTRES: { BASE, COURESE },
+  ROUTES: { BASE, COURESE },
 } = config;
 
 router.get(BASE, authMiddleware, (req, res) => {

@@ -98,3 +98,8 @@
   left: 50%;
   transform: translateX(-50%);
 }
+
+.avatart {
+  max-width: 300px;
+  height: auto;
+}

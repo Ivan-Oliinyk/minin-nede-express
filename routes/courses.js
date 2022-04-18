@@ -7,7 +7,7 @@ const isOwner = require("../helpers/isOwner");
 const router = Router();
 const config = require("../config");
 const {
-  ROUTRES: {
+  ROUTES: {
     BASE,
     COURSE_EDIT,
     COURESE,
