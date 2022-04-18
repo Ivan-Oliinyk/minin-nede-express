@@ -10,6 +10,8 @@ Node version: v16.13.0
 npm install
 ```
 
+## !!! CREATE .env in root direvtory
+
 ## .env files in server look like this::
 
 PORT=3000
