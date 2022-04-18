@@ -13,12 +13,15 @@ const addRoutes = require("./routes/add");
 const orderRoutes = require("./routes/order");
 const coursesRoutes = require("./routes/courses");
 const authRouter = require("./routes/auth");
+const profileRouter = require("./routes/profile");
 const varMiddleware = require("./middleware/variables");
 const userMiddleware = require("./middleware/user");
+const notFoundPage = require("./middleware/notFound404");
 const serverRun = require("./helpers/serverRun");
+const fileMiddleware = require("./middleware/fileMiddleware");
 
 const {
-  ROUTRES: { BASE, COURSE_ADD, COURESE, CARD, ORDER, AUTH },
+  ROUTES: { BASE, COURSE_ADD, COURESE, CARD, ORDER, AUTH, PROFILE },
   PORT,
   MONGODB_URI,
   SESSION_SECRET,
@@ -51,6 +54,7 @@ app.use(
     store,
   })
 );
+app.use(fileMiddleware.single("avatar"));
 app.use(csrf());
 app.use(flash());
 app.use(varMiddleware);
@@ -62,6 +66,9 @@ app.use(COURESE, coursesRoutes);
 app.use(CARD, cardRoutes);
 app.use(ORDER, orderRoutes);
 app.use(AUTH, authRouter);
+app.use(PROFILE, profileRouter);
+
+app.use(notFoundPage);
 
 async function start() {
   try {

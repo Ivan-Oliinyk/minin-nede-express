@@ -1,11 +1,13 @@
+const { validationResult } = require("express-validator/check");
 const { Router } = require("express");
+const { courseValidator } = require("../helpers/validators/courseValidator");
 const Course = require("../models/course");
 const authMiddleware = require("../middleware/auth");
 const isOwner = require("../helpers/isOwner");
 const router = Router();
 const config = require("../config");
 const {
-  ROUTRES: {
+  ROUTES: {
     BASE,
     COURSE_EDIT,
     COURESE,
@@ -38,6 +40,21 @@ router.get(COURSE_EDIT, authMiddleware, async (req, res) => {
     return res.redirect(BASE);
   }
 
+  const errors = validationResult(req);
+
+  // if (!errors.isEmpty()) {
+  //   return res.status(422).render("add", {
+  //     title: `Редактировать ${course.title}`,
+  //     isAdd: true,
+  //     error: errors.array()[0].msg,
+  //     data: {
+  //       title: req.body.title,
+  //       price: req.body.price,
+  //       img: req.body.img,
+  //     },
+  //   });
+  // }
+
   try {
     const course = await Course.findById(req.params.id);
 
@@ -66,27 +83,38 @@ router.post(COURSE_REMOVE, authMiddleware, async (req, res) => {
   }
 });
 
-router.post(COURSE_EDIT_POST, authMiddleware, async (req, res) => {
-  try {
+router.post(
+  COURSE_EDIT_POST,
+  authMiddleware,
+  courseValidator,
+  async (req, res) => {
     const { id } = req.body;
-    delete req.body.id;
+    const errors = validationResult(req);
 
-    const course = await Course.findById(id);
-
-    if (!isOwner(course.userId, req.user._id)) {
-      return res.redirect(COURESE);
+    if (!errors.isEmpty()) {
+      return res.status(422).redirect(`/courses/${id}/edit?allow=true`);
     }
 
-    Object.assign(course, req.body);
-    await course.save();
+    try {
+      delete req.body.id;
 
-    // await Course.findByIdAndUpdate(id, req.body);
+      const course = await Course.findById(id);
 
-    res.redirect(COURESE);
-  } catch (e) {
-    console.log(e);
+      if (!isOwner(course.userId, req.user._id)) {
+        return res.redirect(COURESE);
+      }
+
+      Object.assign(course, req.body);
+      await course.save();
+
+      // await Course.findByIdAndUpdate(id, req.body);
+
+      res.redirect(COURESE);
+    } catch (e) {
+      console.log(e);
+    }
   }
-});
+);
 
 router.get(COURSE_ONE, async (req, res) => {
   try {

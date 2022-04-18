@@ -4,7 +4,7 @@ const authMiddleware = require("../middleware/auth");
 const router = Router();
 const config = require("../config");
 const {
-  ROUTRES: { COURSE_ADD, CARD, CARD_REMOVE },
+  ROUTES: { COURSE_ADD, CARD, CARD_REMOVE },
 } = config;
 
 const mapCartItems = (card) => {

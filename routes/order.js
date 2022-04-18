@@ -4,7 +4,7 @@ const router = Router();
 const Order = require("../models/order");
 const config = require("../config");
 const {
-  ROUTRES: { BASE, ORDER },
+  ROUTES: { BASE, ORDER },
 } = config;
 
 router.get(BASE, authMiddleware, async (req, res) => {
