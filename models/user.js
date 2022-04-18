@@ -38,6 +38,10 @@ const userSchema = new Schema({
       },
     ],
   },
+
+  avatar: {
+    type: String,
+  },
 });
 
 userSchema.methods.addToCard = function (course) {

@@ -4,8 +4,10 @@ const csrf = require("csurf");
 const flash = require("connect-flash");
 const mongoose = require("mongoose");
 const exphbs = require("express-handlebars");
+const helmet = require("helmet");
 const session = require("express-session");
 const MongoStore = require("connect-mongodb-session")(session);
+const compression = require("compression");
 const config = require("./config");
 const homeRoutes = require("./routes/home");
 const cardRoutes = require("./routes/card");
@@ -45,6 +47,8 @@ app.set("view engine", "hbs");
 app.set("views", "views");
 
 app.use(express.static(path.join(__dirname, "public")));
+app.use("/images", express.static(path.join(__dirname, "images")));
+
 app.use(express.urlencoded({ extended: true }));
 app.use(
   session({
@@ -57,9 +61,11 @@ app.use(
 app.use(fileMiddleware.single("avatar"));
 app.use(csrf());
 app.use(flash());
+app.use(helmet());
+app.use(compression());
+
 app.use(varMiddleware);
 app.use(userMiddleware);
-
 app.use(BASE, homeRoutes);
 app.use(COURSE_ADD, addRoutes);
 app.use(COURESE, coursesRoutes);
