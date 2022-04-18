@@ -1,16 +1,16 @@
-<h1 class="title">Pofile</h1>
+<h1 class="title t-center">Профиль</h1>
 
-<div class="row">
+<div class="row profile">
   <div class="col s6">
-    <img
-      class="avatart"
-      src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRlP08Jy1QzdW_DHhA6E62fo5C0OyycFrV3cg&usqp=CAU"
-      alt="avatar"
-    />
-    <p>аватара нету</p>
+    {{#if user.avatar}}
+      <img class="avatart" src="/{{user.avatar}}" alt="avatar-{{user.name}}" />
+    {{else}}
+      <p>аватара нету</p>
+    {{/if}}
+
   </div>
   <div class="col s6">
-    <form action="/profile" method="post">
+    <form action="/profile" method="post" enctype="multipart/form-data">
       <p>Ваш email: <strong>{{user.email}}</strong></p>
 
       <div class="input-field">

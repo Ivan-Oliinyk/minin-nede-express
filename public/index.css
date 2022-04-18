@@ -103,3 +103,12 @@
   max-width: 300px;
   height: auto;
 }
+
+.t-center {
+  text-align: center;
+}
+.profile {
+  padding: 20px;
+  border-radius: 5px;
+  box-shadow: 0 0 9px grey;
+}
